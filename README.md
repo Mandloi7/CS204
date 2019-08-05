@@ -1,2 +1,3 @@
-# cs204
-This will contain all the uploaded assignments for CS204 lab
+Ritik Mandloi
+180101066
+CS204_Lab
