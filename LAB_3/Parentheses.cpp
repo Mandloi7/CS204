@@ -4,10 +4,10 @@ using namespace std;
 int main() {
 	int t;
 	cin >> t;
-	stack<char> stk;
+	
 	
 	while(t--){
-	    
+	   stack<char> stk; 
 	    string str;
 	    int flag=0,b,i;
 	    char x;
