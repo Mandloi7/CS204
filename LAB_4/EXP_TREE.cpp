@@ -1,216 +1,186 @@
-
-#include<bits/stdc++.h>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-struct treenode
-{
-    int i;
-    treenode* left,* right,* parent;
+struct tr{
+    char value;
+    tr *left,*right ;
 };
 
-int prec(char c)
-{
-    if(c == '^')
-    return 3;
-    else if(c == '*' || c == '/')
-    return 2;
-    else if(c == '+' || c == '-')
-    return 1;
+ struct tr* newNode(char a){
+    tr* tp=new tr;
+    tp->left=NULL;
+    tp->right=NULL;
+    tp->value=a;
+    return tp;
+}
+
+bool isOperator(char c) 
+{ 
+    if (c == '+' || c == '-' || 
+            c == '*' || c == '/' || 
+            c == '^') 
+        return true; 
+    return false; 
+} 
+int prec(char c) 
+{ 
+    if(c == '^') 
+    return 3; 
+    else if(c == '*' || c == '/') 
+    return 2; 
+    else if(c == '+' || c == '-') 
+    return 1; 
     else
-    return -1;
-}
+    return -1; 
+} 
 
-bool ischar(char a)
-{
-    if(a=='+'||a=='-'||a=='*'||a=='/'||a=='^'){
-    return true;}
+string ToPostfix(string s) 
+{ 
+    stack<char> st; 
+    st.push('N'); 
+    int l = s.length(); 
+    string ns; 
+    for(int i = 0; i < l; i++) 
+    { 
+        // If the scanned character is an operand, add it to output string. 
+        if(isdigit(s[i]) )
+        ns+=s[i]; 
+  
+        // If the scanned character is an ‘(‘, push it to the stack. 
+        else if(s[i] == '(') 
+          
+        st.push('('); 
+          
+        // If the scanned character is an ‘)’, pop and to output string from the stack 
+        // until an ‘(‘ is encountered. 
+        else if(s[i] == ')') 
+        { 
+            while(st.top() != 'N' && st.top() != '(') 
+            { 
+                char c = st.top(); 
+                st.pop(); 
+               ns += c; 
+            } 
+            if(st.top() == '(') 
+            { 
+                char c = st.top(); 
+                st.pop(); 
+            } 
+        } 
+          
+        //If an operator is scanned 
+        else{ 
+            while(st.top() != 'N' && prec(s[i]) >= prec(st.top())) 
+            { 
+                char c = st.top(); 
+                st.pop(); 
+                ns += c; 
+            } 
+            st.push(s[i]); 
+        } 
+  
+    } 
+    //Pop all the remaining elements from the stack 
+    while(st.top() != 'N') 
+    { 
+        char c = st.top(); 
+        st.pop(); 
+        ns += c; 
+    } 
+      
+ return ns;
+  
+} 
 
-    return false;
-}
 
-int mapo(char c)
-{
-    switch(c)
-    {
-        case '+': return -1;
-        case '-': return -2;
-        case '*': return -3;
-        case '/': return -4;
-        case '^': return -5;
+tr* CreateTree(string postfix) 
+{ 
+    stack<tr *> st; 
+    tr *t, *t1, *t2; 
+  
+    // Traverse through every character of 
+    // input expression 
+    for (int i=0; i<postfix.length(); i++) 
+    { 
+        // If operand, simply push into stack 
+        if (!isOperator(postfix[i])) 
+        { 
+            t = newNode(postfix[i]); 
+            st.push(t); 
+        } 
+        else // operator 
+        { 
+            t = newNode(postfix[i]); 
+  
+            // Pop two top nodes 
+            t1 = st.top(); // Store top 
+            st.pop();      // Remove top 
+            t2 = st.top(); 
+            st.pop(); 
+  
+            //  make them children 
+            t->right = t1; 
+            t->left = t2; 
+  
+            // Add this subexpression to stack 
+            st.push(t); 
+        } 
+    } 
+  
+    //  only element will be root of expression 
+    // tree 
+    t = st.top(); 
+    st.pop(); 
+  
+    return t; 
+} 
+int evaluate(tr* node){
+    if(!isOperator){
+        return node->value;
+    }else{
+        int val;
+        int l=evaluate(node->left);
+        int r=evaluate(node->right);
+        switch (node->value){
+            case '+' : 
+            val=l+r ;
+            break;
+            case '-' : 
+            val=l-r ;
+            break;
+            case '*' : 
+            val=l*r ;
+            break;
+            case '/' : 
+            val=l/r ;
+            break;
+            case '^' : 
+            val=l^r ;
+            break;
+            
+        }
     }
-}
-
-stack<int> postfix(char *s)
-{
-    stack<int> S,O;
-    int f=0,a;
-    O.push('N');
-    for(int i=0;i<strlen(s);i++)
-    {
-        if(s[i]>='0'&&s[i]<='9')
-        {
-            if(f)
-            {
-                a=S.top();
-                S.pop();
-                S.push(a*10+s[i]-'0');
-            }
-            else
-            {
-                S.push(s[i]-'0');
-                f=1;
-            }
-        }
-
-        else
-        {
-            f=0;
-            if(s[i]=='(')
-                O.push('(');
-            else if(s[i]==')')
-            {
-                while(O.top()!='N'&&O.top()!='(')
-                {
-                    char c=O.top();
-                    O.pop();
-                    S.push(mapo(c));
-                }
-                if(O.top()=='(')
-                    O.pop();
-            }
-            else if(ischar(s[i]))
-            {
-                while(O.top()!='N'&&O.top()!='('&&prec(s[i])<=prec(O.top()))
-                {
-                    char c=O.top();
-                    O.pop();
-                    S.push(mapo(c));
-                }
-                O.push(s[i]);
-            }
-        }
-    }
-    while(O.top()!='N')
-        {
-            char c=O.top();
-            O.pop();
-            S.push(mapo(c));
-        }
-    return S;
-}
-
-treenode * newNode(int v)
-{
-    treenode * temp=new treenode;
-    temp->left = NULL;
-    temp->right = NULL;
-    temp->i = v;
-    return temp;
-}
-
-treenode * etree(stack<int> s)
-{
-    treenode *t,*t1,*t2;
-    stack<treenode *> st;
-    while(!s.empty())
-    {
-        if(s.top()>=0)
-        {
-            t=newNode(s.top());
-            s.pop();
-            st.push(t);
-        }
-        else
-        {
-            t=newNode(s.top());
-            t1=st.top();
-            st.pop();
-            t2=st.top();
-            st.pop();
-
-            t->right=t1;
-            t->left=t2;
-
-            st.push(t);
-            s.pop();
-        }
-    }
-    return t;
-}
-
-
-void show(stack<int> s)
-{
-    while(!s.empty())
-    {
-        int a=s.top();
-        s.pop();
-        cout<<a<<endl;
-    }
-}
-
-void printInorder(struct treenode* node)  //inorder traversal
-{
-    if (node == NULL)
-        return;
-
-    printInorder(node->left);
-
-    cout << node->i << " ";
-
-    printInorder(node->right);
-}
-
-
-
-
-int eval(treenode* root)
-{
-
-    if (!root)
-        return 0;
-    if (!root->left && !root->right)
-        return root->i;
-    int l = eval(root->left);
-    int r = eval(root->right);
-    if (root->i==-1)
-        return l+r;
-
-    if (root->i==-2)
-        return l-r;
-
-    if (root->i==-3)
-        return l*r;
-
-    if(root->i==-4)
-        return l/r;
-    return pow(l,r);
-}
-
-
-int main()
-{
+} 
+int main() {
     int t;
-    cin>>t;
-    while(t--)
-    {
-        int T;
-        cin>>T;
-        while(T--)
-        {
-            char s[100000];
-            cin>>s;
-            stack <int> S,s1;
-            S=postfix(s);
-            while(!S.empty())
-            {
-                s1.push(S.top());
-                S.pop();
-            }
-            treenode *p=etree(s1);
-            cout<<eval(p)<<endl;
+    cin >> t;
+    while(t--){
+    
+int n;
+cin >> n;
+string a[n];
+string b[n];
+int i;
+for(i=0;i<n;i++){
+cin >> a[i];
+b[i]=ToPostfix(a[i]);
 
-        }
-    }
+tr* root=CreateTree(b[i]);
+int ans=evaluate(root);
+cout << ans << endl;
+
+
+}
+}
+	return 0;
 }
