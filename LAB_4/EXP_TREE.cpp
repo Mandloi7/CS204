@@ -34,7 +34,7 @@ int prec(char c)
     return -1; 
 } 
 
-string inpost (string s)
+string PF(string s)
 {
 	stack<char> a;
 	string post = "";
@@ -207,7 +207,7 @@ for(i=0;i<n;i++){
 string a;
 string b;
 cin >> a;
-b=inpost(a);
+b=PF(a);
 
 
 
