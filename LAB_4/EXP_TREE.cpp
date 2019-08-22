@@ -39,9 +39,9 @@ string inpost (string s)
 	stack<char> a;
 	string post = "";
 
-	for(int i=0; i<s.length(); i++)
+	for(long long int i=0; i<s.length(); i++)
 	{
-	    int flag=0;
+	    long long int flag=0;
 		if(s[i] >= '0' && s[i] <= '9')
 			{
 				while(s[i] >= '0' && s[i] <= '9')
@@ -54,8 +54,13 @@ string inpost (string s)
 				i--;
 			}
 
-		else if(s[i] == '(')
+		else if(s[i] == '('){
 			a.push(s[i]);
+			if(s[(i+1)]=='-'){
+			    post+="0";
+			    post+=" ";
+			}
+		}
 
 		else if(s[i] == ')')
 		{
@@ -88,9 +93,7 @@ string inpost (string s)
                 post += c;
                 post += " ";
             } 
-            /*if(prec(s[i])==3){
-                if()
-            }*/
+         
              
             a.push(s[i]); 
 		}
@@ -114,15 +117,15 @@ tr* CreateTree(string postfix)
     tr *t, *t1, *t2; 
   
     
-    for (int i=0; i<postfix.length(); i++) 
+    for (long long int i=0; i<postfix.length(); i++) 
     { 
         if(postfix[i]==' '){continue;}
         
         if (!isOperator(postfix[i]) )
         { 
              
-            int z=0;
-            for(int j=i;j<postfix.length();j++){
+           long long  int z=0;
+            for(long long int j=i;j<postfix.length();j++){
                 if(postfix[j]>=48 && postfix[j]<=57){
                     i=j;
                     z=10*z+postfix[j]-48;
@@ -166,10 +169,10 @@ tr* CreateTree(string postfix)
 } 
 
 
-int evaluate (struct tr *root)
+long long int evaluate (struct tr *root)
 {
     if(root->left == NULL && root->right == NULL)
-		return stoi(root->value);
+		return stoll(root->value);
 /*else if(root == NULL)
 	{
 		cout << "EMPTY, CANNOT BE EVALUATED\n";
@@ -179,27 +182,27 @@ int evaluate (struct tr *root)
 	
 	else
 	{
-		int r = evaluate(root->right);
-		int l = evaluate(root->left);
+	long long	int r = evaluate(root->right);
+	long long	int l = evaluate(root->left);
 
 		    if(root->value=="+"){return l+r;}
 		  if(root->value=="-"){return l-r;}
 		  if(root->value=="*"){return l*r;}
 		  if(root->value=="/"){return l/r;}
-		  if(root->value=="^"){return (int)pow(l,r);}
+		  if(root->value=="^"){return (long long int)pow(l,r);}
 		
 	}
 }
 
 int main() {
-  int t;
+ long long  int t;
     cin >> t;
     while(t){
     
-int n;
+long long int n;
 cin >> n;
 while(n){
-int i;
+long long int i;
 for(i=0;i<n;i++){
 string a;
 string b;
@@ -213,7 +216,7 @@ b=inpost(a);
 //CreateTree(b);
 struct tr* root=CreateTree(b);
 //cout << root->value ;
-int ans=evaluate(root);
+long long int ans=evaluate(root);
 cout << ans << endl;
 n--;
 }
