@@ -74,19 +74,24 @@ string inpost (string s)
 
 		else
 		{
-		    if(prec(s[i]==3)&&(a.empty()==0)&&(prec(a.top())==3)){
+		    if(prec(s[i])==3&&(a.empty()==0)&&(prec(a.top())==3)){
                     a.push(s[i]);
                     
                     continue;
-                }
-			while(a.empty() == 0 && prec(s[i]) <= prec(a.top())) 
+            }
+             
+			while((a.empty() == 0) && (prec(s[i]) <= prec(a.top()))) 
             { 
-                
+                //cout << "ljvk" ;
                 char c = a.top(); 
                 a.pop(); 
                 post += c;
                 post += " ";
             } 
+            /*if(prec(s[i])==3){
+                if()
+            }*/
+             
             a.push(s[i]); 
 		}
 		
