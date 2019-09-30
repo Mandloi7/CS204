@@ -27,7 +27,7 @@ lli n = A.size(), k = 0;
 if (n <= 3)
  return A;
 
-vector<Point> ans( n);
+vector<Point> ans(2*n);
 
 
 sort(A.begin(), A.end());
