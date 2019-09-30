@@ -64,6 +64,10 @@ int main()
 {
     lli n;
     cin >>n;
+    if(n<3){
+        cout << "not possible" << endl;
+        return 0;
+    }
 vector<Point> points;
     for(lli i=0;i<n;i++){
         lli a,b;
