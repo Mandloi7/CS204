@@ -55,7 +55,7 @@ int main()
 	color[1] = 0; 
 
 	int flag=0;
-	for(int i=1;i<V;i++){		// FOR DISCONNECTED GRAPH
+	for(int i=1;i<=V;i++){		// FOR DISCONNECTED GRAPH
 	if(visited[i] && i!=1){
 	        continue;
 	    }
