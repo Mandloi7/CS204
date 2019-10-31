@@ -1,7 +1,6 @@
-
 #include <bits/stdc++.h> 
 using namespace std; 
-
+int cnt=1;
 
 void addEdge(vector<int> adj[], int u, int v) 
 { 
@@ -21,7 +20,7 @@ bool isBipartite(vector<int> adj[], int v,
 
 			
 			visited[u] = true; 
-
+            cnt++;
 			 
 			color[u] = !color[v]; 
 
@@ -53,9 +52,19 @@ int main()
 	}
 	visited[1] = true; 
 	color[1] = 0; 
-
-	int flag=0;
-	for(int i=1;i<=V;i++){		// FOR DISCONNECTED GRAPH
+	int	flag=0;
+    if (isBipartite(adj, 1, visited, color)) { 
+	
+	} 
+	else { 
+		cout << "NO\n"; 
+		return 0;
+	} 
+	
+	//int flag=0;
+//	cout << cnt <<" ";
+	if(cnt!=V){
+	for(int i=2;i<=V;i++){		// FOR DISCONNECTED GRAPH
 	if(visited[i] && i!=1){
 	        continue;
 	    }
@@ -71,5 +80,10 @@ int main()
 	if(flag==0){
 		cout << "YES\n";	
 	}
+	}
+	else{
+	    cout << "YES\n";
+	}
+//	cout << cnt;
 	return 0; 
 } 
